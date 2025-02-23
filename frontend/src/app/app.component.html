@@ -1,0 +1,84 @@
+<tui-root>
+  <div class="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-4xl font-bold text-center text-gray-800">To-Do List</h1>
+
+    <!-- Flex container for form and task list -->
+    <div class="flex space-x-8 mt-6">
+      <!-- Task Creation Form (Left Side) -->
+      <div class="flex-1">
+        <h1 class="text-2xl font-bold text-center text-gray-800">Add Task</h1>
+        <form
+          [formGroup]="todoForm"
+          (ngSubmit)="addTask()"
+          class="mt-6 flex flex-col space-y-4"
+        >
+          <tui-input formControlName="title" placeholder="Enter task title"
+            >Task Title</tui-input
+          >
+          <tui-textarea
+            formControlName="description"
+            placeholder="Enter task description"
+            >Task Description</tui-textarea
+          >
+          <button
+            tuiButton
+            size="m"
+            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+          >
+            Add Task
+          </button>
+        </form>
+      </div>
+
+      <!-- Vertical Line -->
+      <div class="w-px bg-gray-300"></div>
+
+      <!-- Task List (Right Side) -->
+      <div class="flex-1">
+        <div class="mt-8">
+          <tui-notification
+            *ngIf="taskController.tasks().length === 0"
+            status="info"
+          >
+            No tasks available. Add a new one!
+          </tui-notification>
+
+          <div
+            *ngFor="let task of taskController.tasks()"
+            class="flex items-center justify-between bg-gray-100 p-4 mb-2 rounded-md shadow-md"
+          >
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">
+                {{ task.title }}
+              </h2>
+              <p class="text-gray-600">{{ task.description }}</p>
+            </div>
+            <button
+              (click)="taskController.completeTask(task.id!)"
+              tuiButton
+              size="s"
+              class="bg-green-500 text-white px-3 py-1 rounded-md"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="mt-4 text-center" *ngIf="taskController.hasMore()">
+          <button
+            (click)="taskController.loadTasks()"
+            tuiButton
+            size="m"
+            class="bg-gray-700 text-white py-2 px-6 rounded-md"
+          >
+            Load More
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- End of Flex container -->
+  </div>
+
+  <router-outlet />
+</tui-root>
